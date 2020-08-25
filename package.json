@@ -21,9 +21,20 @@
   },
   "homepage": "https://github.com/taylorbryant/next-starter-tailwind#readme",
   "dependencies": {
+    "@apollo/client": "^3.0.0-rc.4",
+    "apollo-link-context": "^1.0.20",
+    "formik": "^2.1.4",
+    "graphql": "^15.1.0",
+    "jsonwebtoken": "^8.5.1",
     "next": "9.4.4",
+    "node-fetch": "^2.6.0",
+    "nprogress": "^0.2.0",
     "react": "16.13.1",
-    "react-dom": "16.13.1"
+    "react-dom": "16.13.1",
+    "react-select": "^3.1.0",
+    "recharts": "^1.8.5",
+    "sweetalert2": "^9.15.1",
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "autoprefixer": "9.8.4",

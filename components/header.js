@@ -1,8 +1,61 @@
+import React, { useEffect, useState } from "react";
+import { useQuery, gql } from "@apollo/client";
+import { useRouter } from "next/router";
+import Router from 'next/router';
 import Link from "next/link";
-import { useState } from "react";
+import NProgress from 'nprogress';
+import jwt from 'jsonwebtoken';
 
-function Header() {
+Router.onRouteChangeStart = () => {
+  NProgress.start();
+};
+Router.onRouteChangeComplete = () => {
+  NProgress.done();
+};
+
+Router.onRouteChangeError = () => {
+  NProgress.done();
+};
+
+const OBTENER_USUARIO = gql`
+  query obtenerUsuario {
+    obtenerUsuario {
+      id
+      nombre
+      apellido
+      email
+    }
+  }
+`;
+
+const Header = () => {
+  const router = useRouter();
   const [isExpanded, toggleExpansion] = useState(false);
+  const { data, loading, error } = useQuery(OBTENER_USUARIO);
+
+  /*useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.log('pal login desde header')
+      router.push('/login');
+    }
+
+    return function validar() {
+      try {
+        console.log(token);
+        const usuario = jwt.verify(token, 'palabraSecreta');
+      } catch (error) {
+        console.log('invalid token desde header');
+        router.push('/login');
+      }
+    }
+
+  }, []);*/
+
+  const cerrarSession = () => {
+    localStorage.removeItem("token");
+    router.push("/login");
+  };
 
   return (
     <header className="bg-teal-500">
@@ -37,22 +90,32 @@ function Header() {
         <ul
           className={`${
             isExpanded ? `block` : `hidden`
-          } md:flex flex-col md:flex-row md:items-center md:justify-center text-sm w-full md:w-auto`}
+            } md:flex flex-col md:flex-row md:items-center md:justify-center text-sm w-full md:w-auto`}
         >
           {[
             { title: "Home", route: "/" },
-            { title: "About", route: "/about" }
+            { title: "About", route: "/about" },
+            { title: "Customers", route: "/clientes" }
           ].map(navigationItem => (
-            <li className="mt-3 md:mt-0 md:ml-6" key={navigationItem.title}>
+            <li className="mt-3 md:mt-0 md:ml-6 font-bold" key={navigationItem.title}>
               <Link href={navigationItem.route}>
                 <a className="block text-white">{navigationItem.title}</a>
               </Link>
             </li>
           ))}
+          <li>
+            <button
+              onClick={() => cerrarSession()}
+              className="mt-3 md:mt-0 md:ml-6 block text-white font-bold"
+              type="button"
+            >
+              Cerrar Sessión
+          </button>
+          </li>
         </ul>
       </div>
     </header>
-  );
+  )
 }
 
 export default Header;
